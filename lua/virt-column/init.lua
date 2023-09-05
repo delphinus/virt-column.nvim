@@ -4,6 +4,9 @@ local M = {
     config = {
         char = "┃",
         virtcolumn = "",
+        buf_filter = function(buf)
+            return vim.bo[buf].buftype ~= "terminal"
+        end,
     },
     buffer_config = {},
 }
@@ -41,7 +44,7 @@ end
 M.refresh = function()
     local bufnr = vim.api.nvim_get_current_buf()
 
-    if not vim.api.nvim_buf_is_loaded(bufnr) then
+    if not vim.api.nvim_buf_is_loaded(bufnr) or not M.config.buf_filter(bufnr) then
         return
     end
 
